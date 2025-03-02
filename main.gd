@@ -9,6 +9,7 @@ func _ready():   #can use new_game to test out the game
 
 
 func game_over():          #handles game over
+	print("Game Over - Stopping Timers") # Debug print
 	$ScoreTimer.stop()
 	$MobTimer.stop()
 	$HUD.show_game_over()
@@ -17,12 +18,14 @@ func game_over():          #handles game over
 
 func new_game():      #starts new game
 	score = 0
+	$ScoreTimer.stop() #ensure timer is stopped before restarting
+	$MobTimer.stop()
 	$Player.start($StartPosition.position)
-	$StartTimer.start()
 	$HUD.update_score(score)
 	$HUD.show_message("Get ready!")
 	get_tree().call_group("mobs", "queue_free") #calls mob to delete itself
 	$Music.play()
+	$StartTimer.start()
 
 
 func _on_mob_timer_timeout():      
@@ -45,6 +48,7 @@ func _on_mob_timer_timeout():
 
 
 func _on_score_timer_timeout(): #increases score by 1
+	print("Score Timer Tick: ", score) # Debug print
 	score += 1
 	$HUD.update_score(score)
 
